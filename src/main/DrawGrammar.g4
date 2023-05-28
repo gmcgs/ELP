@@ -2,7 +2,8 @@ grammar DrawGrammar;
 
 INT: [0-9]+;
 BOOL: 'true' | 'false';
-PONTO2D: INT','INT;
-DIMENSAO: INT'~'INT;
-INTERVALO: ('[' | ']')INT', 'INT('[' | ']');
-COR: (INT)?'|'INT'|'(INT)?;
+EXPRESSAO: INT;
+PONTO2D: EXPRESSAO','EXPRESSAO;
+DIMENSAO: EXPRESSAO'~'EXPRESSAO;
+INTERVALO: ('[' | ']')EXPRESSAO', 'EXPRESSAO('[' | ']');
+COR: (EXPRESSAO)?'|'EXPRESSAO'|'(EXPRESSAO)?;
