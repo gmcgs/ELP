@@ -1,22 +1,34 @@
 grammar Test;
 
-//script
-script: constante* propriedade* instrucao*;
+//script instrucao*
+script: constante* propriedade* ;
 
 //constante
 constante: identificador ':' value;
-
+identificador: VAL;
+VAL:[A-Z][A-Z0-9]*;
+value: NUMBER | COLOR_LITERAL+ ;
 
 
 //propriedade '-'{2,}significa no mínimo 2 (--)
-propriedade: '-'{2,} identificador ':' value '-'{2,};
+propriedade: '-'* identif ':' valor '-'*;
+identif: SVAL;
+SVAL:[a-z][a-z0-9]*;
+valor: identificador|(identificador binaryOperator identificador)*;
+binaryOperator: '+' | '-' | '*' | '/' | '%' | '=';
 
 //instrução
 instrucao: ;
 
-identificador:;
-value: NUMBER | COLOR_LITERAL | DIMENSION_LITERAL;
+
+
+//| DIMENSION_LITERAL
+
+//não há limite de 3 valores para a cor
+COLOR_LITERAL: '|' [0-9]+ '|';
 
 NUMBER: [0-9]+;
-COLOR_LITERAL: '|' [0-9]{1,3} '|';
-DIMENSION_LITERAL: ;
+
+//DIMENSION_LITERAL: ;
+
+WS: [ \t\r\n]+ -> skip;
