@@ -77,6 +77,26 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitValor(TestParser.ValorContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TestParser#first}.
+	 * @param ctx the parse tree
+	 */
+	void enterFirst(TestParser.FirstContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#first}.
+	 * @param ctx the parse tree
+	 */
+	void exitFirst(TestParser.FirstContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void enterName(TestParser.NameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void exitName(TestParser.NameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TestParser#binaryOperator}.
 	 * @param ctx the parse tree
 	 */
