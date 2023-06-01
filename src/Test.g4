@@ -18,22 +18,23 @@ instrucao: colorCommand | loopCommand | drawCommand | ifCommand;
 colorCommand: 'color' identificador;
 
 //while?
-loopCommand:'for' identif 'in' '[' name',' name ('['|']') algo* '-';
+loopCommand:'for' identif 'in' '[' name',' name ('['|']') algo+ '-';
 
-drawCommand:VAL;
+drawCommand:geometric;
 
-algo: loopCommand| ifCommand | elseifCommand |elseCommand | statement;
+algo: loopCommand| ifCommand | elseifCommand |(elseCommand)| statement;
 
 ifCommand: 'if' if+ condition if+;
 elseifCommand:'else-if' if+ condition if+;
-elseCommand:'else';
-statement: 'fill' identificador;
+elseCommand:'else' statement+ '-';
+statement: ('fill' identificador)|geometric;
+geometric:square|rectangule ;
 
 square: 'square'figure+ ',' figure+;
 rectangule: 'rectangle' figure+ ',' figure+ '~' figure+ ;
-circle:;
+/*circle:;
 elipse:;
-seq:;
+seq:;*/
 
 
 first:name binaryOperator|name ;
