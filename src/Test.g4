@@ -1,24 +1,42 @@
 grammar Test;
 
 //script instrucao*
-script: constante* '-''-'+ propriedade* '-'+ instrucao*;
+script: constante+ div (propriedade+ div)? instrucao+ EOF;
+
+//estrutura do script
+constante: capsID ASSIGN objeto ENTER;
+propriedade: lowerID ASSIGN (capsID | dim | color) ENTER;
+instrucao: (colorCommand | figure | estrutura) ENTER;
+div: DIV ENTER;
 
 //constante
-constante: identificador ':' value;
-value: NUMBER | COLOR_LITERAL+ ;
-
-//propriedade falta no mínimo 2 (--)
-propriedade: identif ':' valor;
-
-valor:VAL|first+'~'first+ ;
+objeto: (expressao | BOOLEAN | point2D | dim | interval | color ) ;
+point2D: expressao COMA expressao;
+dim: expressao TIL expressao;
+interval: BRACKET expressao COMA expressao BRACKET;
+color: cut | full;
+cut: VERTICAL expressao VERTICAL;
+full: expressao VERTICAL expressao VERTICAL expressao;
 
 //instrução
-instrucao: colorCommand | loopCommand | drawCommand | ifCommand;
+colorCommand: lowerID (color | capsID);
+figure: lowerID fig shape;
+estrutura: ifCommand | forloop;
 
-colorCommand: 'color' identificador;
+//figura (circulo + quadrado | retangulo + elipse)
+fig: expressao COMA expressao;
+shape: expressao | dim;
+//falta seq de pontos
 
+//estrutura de controlo
+ifCommand: IF condicao ENTER instrucao+ (ELSE ENTER instrucao+)? END;
+condicao: INT|operacao+ CONDITION INT|BOOLEAN|operacao+;
+forloop: FOR lowerID IN interval ENTER instrucao+ END;
+
+/*
 //while?
-loopCommand:'for' identif 'in' '[' name',' name ('['|']') algo+ '-';
+loopCommand:'for' lowerID 'in' '[' name',' name ('['|']') algo+ '-';
+
 
 drawCommand:geometric;
 
@@ -27,34 +45,61 @@ algo: loopCommand| ifCommand | elseifCommand |(elseCommand)| statement;
 ifCommand: 'if' if+ condition if+;
 elseifCommand:'else-if' if+ condition if+;
 elseCommand:'else' statement+ '-';
-statement: ('fill' identificador)|geometric;
+statement: ('fill' capsID)|geometric;
 geometric:square|rectangule ;
 
 square: 'square'figure+ ',' figure+;
 rectangule: 'rectangle' figure+ ',' figure+ '~' figure+ ;
+*/
 /*circle:;
 elipse:;
 seq:;*/
+/*
+first:name OPERATOR|name ;
 
-
-first:name binaryOperator|name ;
-identificador: VAL;
-identif: SVAL;
 name:VAL|NUMBER;
-if:cond binaryOperator|cond|binaryOperator cond|parenteses ;
-figure:cond binaryOperator|cond;
+if:cond OPERATOR|cond|OPERATOR cond|parenteses ;
+figure:cond OPERATOR|cond;
 cond:SVAL|VAL|NUMBER ;
 parenteses: '('|')';
-binaryOperator: '+' | '-' | '*' | '/' | '%'  ;
 condition: '<'|'>'|'=' ;
-SVAL:[a-z][a-z0-9]*;
 //não há limite de 3 valores para a cor
-COLOR_LITERAL: '|' [0-9]+ '|';
-VAL:[A-Z][A-Z0-9]*;
-NUMBER: [0-9]+;
+
+
+*/
+
+//aux
+capsID: CAPS;
+lowerID: LOWER;
+expressao: INT | CAPS | LOWER | operacao+;
+aux: INT | CAPS | LOWER;
+operacao: aux OPERATOR aux | aux OPERATOR operacao |
+aux OPERATOR OPEN operacao CLOSE | operacao OPERATOR OPEN operacao CLOSE |
+OPEN operacao CLOSE OPERATOR operacao | OPEN operacao CLOSE OPERATOR aux;
+//operacao: aux OPERATOR aux | aux OPERATOR operacao | OPEN | CLOSE;
+//OPEN aux OPERATOR aux CLOSE OPERATOR operacao| OPEN aux OPERATOR operacao CLOSE OPERATOR operacao;
 
 
 
-//DIMENSION_LITERAL: ;
-
-WS: [ \t\r\n]+ -> skip;
+//lexer
+IF: 'if';
+ELSE: 'else';
+FOR: 'for';
+IN: 'in';
+BOOLEAN: 'true' | 'false';
+OPERATOR: '+' | '-' | '*' | '/' | '%';
+CONDITION: '==' | '!=' | '<' | '>' | '<=' | '>=';
+ASSIGN: ':';
+DIV: '---';
+TIL: '~';
+COMA: ',';
+BRACKET: '[' | ']';
+VERTICAL: '|';
+OPEN: '(';
+CLOSE: ')';
+END: '_';
+INT: [0-9]+;
+CAPS:[A-Z][A-Z0-9]*;
+LOWER:[a-z][a-z0-9]*;
+ENTER: '\r' | '\r\n' | '\n';
+WS: ' '+ -> skip;
