@@ -33,41 +33,6 @@ ifCommand: IF condicao ENTER instrucao+ (ELSE ENTER instrucao+)? END;
 condicao: INT|operacao+ CONDITION INT|BOOLEAN|operacao+;
 forloop: FOR lowerID IN interval ENTER instrucao+ END;
 
-/*
-//while?
-loopCommand:'for' lowerID 'in' '[' name',' name ('['|']') algo+ '-';
-
-
-drawCommand:geometric;
-
-algo: loopCommand| ifCommand | elseifCommand |(elseCommand)| statement;
-
-ifCommand: 'if' if+ condition if+;
-elseifCommand:'else-if' if+ condition if+;
-elseCommand:'else' statement+ '-';
-statement: ('fill' capsID)|geometric;
-geometric:square|rectangule ;
-
-square: 'square'figure+ ',' figure+;
-rectangule: 'rectangle' figure+ ',' figure+ '~' figure+ ;
-*/
-/*circle:;
-elipse:;
-seq:;*/
-/*
-first:name OPERATOR|name ;
-
-name:VAL|NUMBER;
-if:cond OPERATOR|cond|OPERATOR cond|parenteses ;
-figure:cond OPERATOR|cond;
-cond:SVAL|VAL|NUMBER ;
-parenteses: '('|')';
-condition: '<'|'>'|'=' ;
-//não há limite de 3 valores para a cor
-
-
-*/
-
 //aux
 capsID: CAPS;
 lowerID: LOWER;
