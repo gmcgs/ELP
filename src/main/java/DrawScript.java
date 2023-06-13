@@ -19,9 +19,13 @@ public class DrawScript {
             ScriptInterpreter scriptInterpreter = new ScriptInterpreter();
             parser.addParseListener(scriptInterpreter);
             parser.script();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static class Interpreter {
     }
 }
