@@ -146,8 +146,20 @@ public class ASTBuilder {
     }
 
     private String determineConstantType(String value) {
-        // Implement logic to determine the data type of the constant based on the assigned value
-        // Return the data type as a string
-        return null;
+        if(value.matches("\\d+,\\d+")){
+            return "Ponto2D";
+        } else if(value.matches("\\d+~\\d+")){
+            return "Dimensão";
+        } else if(value.matches("[\\[\\]]\\d+(?:,\\s*\\d+)?[\\[\\]]")){
+            return "Intervalo";
+        } else if(value.matches("(?:\\d+\\|){2}\\d+|\\|\\d+\\|")){
+            return "Cor";
+        } else if (value.matches("\\d+")) {
+            return "Inteiro";
+        } else if (value.equals("true") || value.equals("false")){
+            return "Booleano";
+        } else {
+            return "Tipo de constante não definido";
+        }
     }
 }
