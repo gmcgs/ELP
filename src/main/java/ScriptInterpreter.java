@@ -1,5 +1,5 @@
 public class ScriptInterpreter extends TestBaseListener {
-    @Override 
+   /* @Override
     public void enterScript(TestParser.ScriptContext ctx) { 
         
     }
@@ -52,5 +52,5 @@ public class ScriptInterpreter extends TestBaseListener {
     @Override 
     public void enterInstrucao(TestParser.InstrucaoContext ctx) { }
     @Override 
-    public void exitInstrucao(TestParser.InstrucaoContext ctx) { }
+    public void exitInstrucao(TestParser.InstrucaoContext ctx) { }*/
 }

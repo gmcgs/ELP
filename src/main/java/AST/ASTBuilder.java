@@ -25,9 +25,7 @@ public class ASTBuilder {
                 return visitIfCommand(parseTree);
             case "ForLoopContext":
                 return visitForLoop(parseTree);
-            // Add cases for other rule types as needed
             default:
-                // Ignore terminal nodes
                 return null;
         }
     }
