@@ -10,6 +10,4 @@ public class ConstantNode extends ASTNode {
         this.value = value;
         this.type = type;
     }
-
-    // Getters and other methods specific to ConstantNode
 }

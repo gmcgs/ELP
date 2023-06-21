@@ -9,15 +9,5 @@ dimension: N*SIDE + MARGIN*2 ~ N*SIDE + MARGIN*2
 background: GRAY
 ---
 color BLACK
-for l in [0,N[
-for c in [0,N[
-if (l + c) % 2 = 0
-fill WHITE
-else
-fill BLACK
-_
-square c * SIDE + MARGIN,l * SIDE + MARGIN SIDE
-_
-_
 line 0|0|255
 rectangle MARGIN,MARGIN N*SIDE ~ N*SIDE

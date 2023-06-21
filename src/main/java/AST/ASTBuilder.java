@@ -1,5 +1,6 @@
 package AST;
 
+
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class ASTBuilder {
@@ -12,20 +13,28 @@ public class ASTBuilder {
 
         switch (ruleName) {
             case "ScriptContext":
+                System.out.println(parseTree);
                 return visitScript(parseTree);
             case "ConstanteContext":
+                System.out.println(parseTree);
                 return visitConstant(parseTree);
             case "PropriedadeContext":
+                System.out.println(parseTree);
                 return visitPropriedade(parseTree);
             case "InstrucaoContext":
+                System.out.println(parseTree);
                 return visitInstrucao(parseTree);
             case "ColorCommandContext":
+                System.out.println(parseTree);
                 return visitColorCommand(parseTree);
             case "IfCommandContext":
+                System.out.println(parseTree);
                 return visitIfCommand(parseTree);
             case "ForLoopContext":
+                System.out.println(parseTree);
                 return visitForLoop(parseTree);
             default:
+                System.out.println(parseTree);
                 return null;
         }
     }
