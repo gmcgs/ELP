@@ -6,11 +6,13 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class DrawScript {
+
     public static void main(String[] args) {
         try{
             FileReader reader = new FileReader("src/main/resources/grammar/script.txt");
@@ -21,7 +23,6 @@ public class DrawScript {
                 fileContents.append(line).append("\n");
             }
             bufferedReader.close();
-            System.out.println(fileContents.toString());
             CharStream input = CharStreams.fromString(fileContents.toString());
             TestLexer lexer = new TestLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -29,15 +30,15 @@ public class DrawScript {
             ScriptInterpreter scriptInterpreter = new ScriptInterpreter();
             parser.addParseListener(scriptInterpreter);
             ParseTree parseTree = parser.script();
+            scriptInterpreter.printFile();
             System.out.println(parseTree.toStringTree(parser));
-            ASTBuilder astBuilder = new ASTBuilder();
-            ASTNode astTree = astBuilder.buildAST(parseTree);
-            //System.out.println(astTree.toString());
+            JFrame frame = new JFrame("DrawScript");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(scriptInterpreter.getDimensions().get(0),scriptInterpreter.getDimensions().get(1));
+            frame.getContentPane().setBackground(scriptInterpreter.getBackground());
+            frame.setVisible(true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static class Interpreter {
     }
 }
