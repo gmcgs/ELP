@@ -1,27 +1,22 @@
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import javax.script.*;
-import javax.sound.midi.SysexMessage;
+
 
 import static java.lang.System.exit;
 
 public class ScriptInterpreter extends TestBaseListener implements TestListener{
-    public Map<String, Integer> constantesInt = new HashMap<>();
+    public static Map<String, Integer> constantesInt = new HashMap<>();
     public Map<String, Boolean> constantesBool = new HashMap<>();
     public Map<String, List<Integer>> constantesPonto = new HashMap<>();
     public Map<String, List<Integer>> constantesDim = new HashMap<>();
     public Map<String, List<Integer>> constantesIntervalo = new HashMap<>();
     public Map<String, Color> constantesCor = new HashMap<>();
-    public Map<String, String> propriedadesConst = new HashMap<>();
-    public Map<String, List<String>> propriedadesDim = new HashMap<>();
-    public Map<String, Color> propriedadesCor = new HashMap<>();
 
     public String div = "";
     private static final Map<Character, Integer> precedence = new HashMap<>();
+
     @Override
     public void exitConstante(TestParser.ConstanteContext ctx) {
         if(ctx.objeto().getText().matches("\\d+,\\d+")){
@@ -54,7 +49,7 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
             interValues.add(Integer.parseInt(ctx.objeto().interval().expressao(1).getText()));
             constantesIntervalo.put(ctx.capsID().CAPS().getText(),interValues);
             //System.out.println(constantesIntervalo.get(ctx.capsID().CAPS().getText()).toString());
-        } else if(ctx.objeto().getText().matches("\\d+\\|\\d+\\|\\|\\d+")){
+        } else if(ctx.objeto().getText().matches("\\d+\\|\\d+\\|\\d+")){
             if(constantesCor.containsKey(ctx.capsID().CAPS().getText())){
                 System.err.println("Identificador de constante duplicado.");
                 exit(0);
@@ -97,26 +92,91 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
             if(ctx.color().getText().matches("\\|\\d+\\|")){
                 int rgb = Integer.parseInt(ctx.color().cut().expressao().INT().getText());
                 checkColor(rgb,rgb,rgb);
-                propriedadesCor.put(ctx.lowerID().LOWER().getText(), new Color(rgb,rgb,rgb));
+                DrawScript.backgroundPanel.setBackground(new Color(rgb,rgb,rgb));
                 //System.out.println(propriedadesCor.get(ctx.capsID().CAPS().getText()).toString());
-            } else {
+            } else if(ctx.color().getText().matches("\\d+\\|\\d+\\|\\d+")){
                 int r = Integer.parseInt(ctx.color().full().expressao(0).getText());
                 int g = Integer.parseInt(ctx.color().full().expressao(1).getText());
                 int b = Integer.parseInt(ctx.color().full().expressao(2).getText());
                 checkColor(r,g,b);
-                propriedadesCor.put(ctx.lowerID().LOWER().getText(), new Color(r,g,b));
+                DrawScript.backgroundPanel.setBackground(new Color(r,g,b));
                 //System.out.println(propriedadesCor.get(ctx.capsID().CAPS().getText()).toString());
             }
         } else if(ctx.dim() != null){
-            List<String> dimValuesProp = new ArrayList<>();
-            dimValuesProp.add(ctx.dim().expressao(0).getText());
-            dimValuesProp.add(ctx.dim().expressao(1).getText());
-            propriedadesDim.put(ctx.lowerID().LOWER().getText(),dimValuesProp);
+            String x = ctx.dim().expressao(0).getText();
+            String y = ctx.dim().expressao(1).getText();
+            DrawScript.frame.setSize(evaluateExpression(x),evaluateExpression(y));
+            DrawScript.backgroundPanel.setSize(evaluateExpression(x),evaluateExpression(y));
+            DrawScript.frontPanel.setSize(evaluateExpression(x),evaluateExpression(y));
+            DrawScript.painter.setSize(evaluateExpression(x),evaluateExpression(y));
+            DrawScript.x = evaluateExpression(x);
+            DrawScript.y = evaluateExpression(y);
             //System.out.println(propriedadesDim.get(ctx.lowerID().LOWER().getText()).toString());
         } else if(ctx.capsID() != null) {
-            propriedadesConst.put(ctx.lowerID().LOWER().getText(), ctx.capsID().CAPS().getText());
+            if(Objects.equals(ctx.lowerID().LOWER().getText(), "dimension") && constantesDim.containsKey(ctx.capsID().CAPS().getText())){
+                DrawScript.backgroundPanel.setSize(constantesDim.get(ctx.capsID().CAPS().getText()).get(0),constantesDim.get(ctx.capsID().CAPS().getText()).get(1));
+                DrawScript.frame.setSize(constantesDim.get(ctx.capsID().CAPS().getText()).get(0),constantesDim.get(ctx.capsID().CAPS().getText()).get(1));
+                DrawScript.frontPanel.setSize(constantesDim.get(ctx.capsID().CAPS().getText()).get(0),constantesDim.get(ctx.capsID().CAPS().getText()).get(1));
+                DrawScript.painter.setSize(constantesDim.get(ctx.capsID().CAPS().getText()).get(0),constantesDim.get(ctx.capsID().CAPS().getText()).get(1));
+                DrawScript.x = constantesDim.get(ctx.capsID().CAPS().getText()).get(0);
+                DrawScript.y = constantesDim.get(ctx.capsID().CAPS().getText()).get(1);
+            } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "background") && constantesCor.containsKey(ctx.capsID().CAPS().getText())){
+                DrawScript.backgroundPanel.setBackground(constantesCor.get(ctx.capsID().CAPS().getText()));
+            }
             //System.out.println(propriedadesConst.get(ctx.lowerID().LOWER().getText()));
         }
+    }
+
+    @Override
+    public void exitColorCommand(TestParser.ColorCommandContext ctx) {
+        if(Objects.equals(ctx.lowerID().LOWER().getText(), "line") && ctx.color() != null){
+            if(ctx.color().getText().matches("\\|\\d+\\|")){
+                int rgb = Integer.parseInt(ctx.color().cut().expressao().INT().getText());
+                checkColor(rgb,rgb,rgb);
+                DrawScript.liner = new Color(rgb,rgb,rgb);
+            } else if(ctx.color().getText().matches("\\d+\\|\\d+\\|\\d+")){
+                int r = Integer.parseInt(ctx.color().full().expressao(0).getText());
+                int g = Integer.parseInt(ctx.color().full().expressao(1).getText());
+                int b = Integer.parseInt(ctx.color().full().expressao(2).getText());
+                checkColor(r,g,b);
+                DrawScript.liner = new Color(r,g,b);
+            }
+        } else if (Objects.equals(ctx.lowerID().LOWER().getText(), "line") && ctx.capsID() != null) {
+            DrawScript.liner = constantesCor.get(ctx.capsID().CAPS().getText());
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "color") && ctx.color() != null){
+            if(ctx.color().getText().matches("\\|\\d+\\|")){
+                int rgb = Integer.parseInt(ctx.color().cut().expressao().INT().getText());
+                checkColor(rgb,rgb,rgb);
+                DrawScript.filler = new Color(rgb,rgb,rgb);
+            } else if(ctx.color().getText().matches("\\d+\\|\\d+\\|\\d+")){
+                int r = Integer.parseInt(ctx.color().full().expressao(0).getText());
+                int g = Integer.parseInt(ctx.color().full().expressao(1).getText());
+                int b = Integer.parseInt(ctx.color().full().expressao(2).getText());
+                checkColor(r,g,b);
+                DrawScript.filler = new Color(r,g,b);
+            }
+        } else if (Objects.equals(ctx.lowerID().LOWER().getText(), "color") && ctx.capsID() != null) {
+            DrawScript.filler = constantesCor.get(ctx.capsID().CAPS().getText());
+        }
+
+    }
+
+    @Override
+    public void exitFigure(TestParser.FigureContext ctx) {
+        if(Objects.equals(ctx.lowerID().LOWER().getText(), "square")){
+            DrawScript.painter.figures.add(new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), constantesInt.get(ctx.shape().expressao().CAPS().getText())));
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "rectangle")){
+            DrawScript.painter.figures.add(new DrawScript.Rectangle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "circle")){
+            DrawScript.painter.figures.add(new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), constantesInt.get(ctx.shape().expressao().CAPS().getText())));
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "ellipse")){
+            DrawScript.painter.figures.add(new DrawScript.Ellipse(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+        }
+    }
+
+    @Override
+    public void exitEstrutura(TestParser.EstruturaContext ctx) {
+
     }
 
     @Override public void exitDiv(TestParser.DivContext ctx) {
@@ -129,71 +189,6 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
         }
     }
 
-    public List<Integer> getDimensions(){
-        List<String> value = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : propriedadesDim.entrySet()){
-            value = entry.getValue();
-        }
-        List<Integer> dimensions = new ArrayList<>();
-        for (String str : value){
-            String expression = str;
-            for (Map.Entry<String, Integer> entry : constantesInt.entrySet()) {
-                String key = entry.getKey();
-                int constValue = entry.getValue();
-                expression = expression.replaceAll(key, String.valueOf(constValue));
-            }
-            dimensions.add(evaluateExpression(expression));
-        }return dimensions;
-    }
-
-    public Color getBackground(){
-        Color color = new Color(0);
-        for (Map.Entry<String, String> entry : propriedadesConst.entrySet()){
-            String colorName = entry.getValue();
-            color = constantesCor.get(colorName);
-        }
-        System.out.println(color);
-        return color;
-    }
-    public void printFile(){
-        System.out.println("\nFile parsed:");
-        if(!constantesBool.isEmpty()){
-            for (Map.Entry<?, ?> entry : constantesBool.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!constantesInt.isEmpty()){
-            for (Map.Entry<?, ?> entry : constantesInt.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!constantesCor.isEmpty()){
-            for (Map.Entry<?, ?> entry : constantesCor.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!constantesPonto.isEmpty()){
-            for (Map.Entry<?, ?> entry : constantesPonto.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!constantesDim.isEmpty()){
-            for (Map.Entry<?, ?> entry : constantesDim.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }System.out.println(div);
-        if(!propriedadesDim.isEmpty()){
-            for (Map.Entry<?, ?> entry : propriedadesDim.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!propriedadesCor.isEmpty()){
-            for (Map.Entry<?, ?> entry : propriedadesCor.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }if(!propriedadesConst.isEmpty()){
-            for (Map.Entry<?, ?> entry : propriedadesConst.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }
-        System.out.println(div);
-    }
-
     static {
         precedence.put('+', 1);
         precedence.put('-', 1);
@@ -202,6 +197,12 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
     }
 
     public static int evaluateExpression(String expression) {
+        for (Map.Entry<String, Integer> entry : constantesInt.entrySet()) {
+            String key = entry.getKey();
+            int constValue = entry.getValue();
+            expression = expression.replaceAll(key, String.valueOf(constValue));
+            expression = expression.replaceAll(key, String.valueOf(constValue));
+        }
         List<String> postfix = infixToPostfix(expression);
         return evaluatePostfix(postfix);
     }
