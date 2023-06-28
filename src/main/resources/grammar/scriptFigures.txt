@@ -11,5 +11,6 @@ background: GRAY
 color BLACK
 circle 30,30 15
 square SIDE + MARGIN,SIDE + MARGIN SIDE
+circle SIDE,30 15
 ellipse MARGIN * N,MARGIN * N 10 ~ 13
 line 0|0|255

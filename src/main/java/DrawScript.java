@@ -32,12 +32,8 @@ public class DrawScript {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             for (Figure figure : figures) {
-                System.out.println(figure.toString());
                 figure.draw(g);
             }
-        }
-        public List<Figure> getFigures() {
-            return figures;
         }
     }
 
@@ -101,7 +97,7 @@ public class DrawScript {
             g.setColor(filler);
             g.fillOval(x, y, diameter, diameter);
             g.setColor(liner);
-            g.fillOval(x, y, diameter, diameter);
+            g.drawOval(x, y, diameter, diameter);
         }
     }
 
@@ -128,7 +124,7 @@ public class DrawScript {
     }
     public static void main(String[] args) {
         try{
-            FileReader reader = new FileReader("src/main/resources/grammar/script.txt");
+            FileReader reader = new FileReader("src/main/resources/grammar/scriptForIf");
             BufferedReader bufferedReader = new BufferedReader(reader);
             StringBuilder fileContents = new StringBuilder();
             String line;
