@@ -1,4 +1,5 @@
-// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src\Test.g4 by ANTLR 4.12.0
+// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src/main/resources/grammar\Test.g4 by ANTLR 4.12.0
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -56,6 +57,96 @@ public interface TestListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDiv(TestParser.DivContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#colorCommand}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorCommand(TestParser.ColorCommandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#colorCommand}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorCommand(TestParser.ColorCommandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#figure}.
+	 * @param ctx the parse tree
+	 */
+	void enterFigure(TestParser.FigureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#figure}.
+	 * @param ctx the parse tree
+	 */
+	void exitFigure(TestParser.FigureContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#estrutura}.
+	 * @param ctx the parse tree
+	 */
+	void enterEstrutura(TestParser.EstruturaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#estrutura}.
+	 * @param ctx the parse tree
+	 */
+	void exitEstrutura(TestParser.EstruturaContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#fig}.
+	 * @param ctx the parse tree
+	 */
+	void enterFig(TestParser.FigContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#fig}.
+	 * @param ctx the parse tree
+	 */
+	void exitFig(TestParser.FigContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#shape}.
+	 * @param ctx the parse tree
+	 */
+	void enterShape(TestParser.ShapeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#shape}.
+	 * @param ctx the parse tree
+	 */
+	void exitShape(TestParser.ShapeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#ifCommand}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfCommand(TestParser.IfCommandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#ifCommand}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfCommand(TestParser.IfCommandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#elseCommand}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseCommand(TestParser.ElseCommandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#elseCommand}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseCommand(TestParser.ElseCommandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#condicao}.
+	 * @param ctx the parse tree
+	 */
+	void enterCondicao(TestParser.CondicaoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#condicao}.
+	 * @param ctx the parse tree
+	 */
+	void exitCondicao(TestParser.CondicaoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#forloop}.
+	 * @param ctx the parse tree
+	 */
+	void enterForloop(TestParser.ForloopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#forloop}.
+	 * @param ctx the parse tree
+	 */
+	void exitForloop(TestParser.ForloopContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TestParser#objeto}.
 	 * @param ctx the parse tree
@@ -127,86 +218,6 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitFull(TestParser.FullContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TestParser#colorCommand}.
-	 * @param ctx the parse tree
-	 */
-	void enterColorCommand(TestParser.ColorCommandContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#colorCommand}.
-	 * @param ctx the parse tree
-	 */
-	void exitColorCommand(TestParser.ColorCommandContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#figure}.
-	 * @param ctx the parse tree
-	 */
-	void enterFigure(TestParser.FigureContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#figure}.
-	 * @param ctx the parse tree
-	 */
-	void exitFigure(TestParser.FigureContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#estrutura}.
-	 * @param ctx the parse tree
-	 */
-	void enterEstrutura(TestParser.EstruturaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#estrutura}.
-	 * @param ctx the parse tree
-	 */
-	void exitEstrutura(TestParser.EstruturaContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#fig}.
-	 * @param ctx the parse tree
-	 */
-	void enterFig(TestParser.FigContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#fig}.
-	 * @param ctx the parse tree
-	 */
-	void exitFig(TestParser.FigContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#shape}.
-	 * @param ctx the parse tree
-	 */
-	void enterShape(TestParser.ShapeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#shape}.
-	 * @param ctx the parse tree
-	 */
-	void exitShape(TestParser.ShapeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#ifCommand}.
-	 * @param ctx the parse tree
-	 */
-	void enterIfCommand(TestParser.IfCommandContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#ifCommand}.
-	 * @param ctx the parse tree
-	 */
-	void exitIfCommand(TestParser.IfCommandContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#condicao}.
-	 * @param ctx the parse tree
-	 */
-	void enterCondicao(TestParser.CondicaoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#condicao}.
-	 * @param ctx the parse tree
-	 */
-	void exitCondicao(TestParser.CondicaoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TestParser#forloop}.
-	 * @param ctx the parse tree
-	 */
-	void enterForloop(TestParser.ForloopContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TestParser#forloop}.
-	 * @param ctx the parse tree
-	 */
-	void exitForloop(TestParser.ForloopContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link TestParser#capsID}.
 	 * @param ctx the parse tree
 	 */
@@ -247,13 +258,33 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitAux(TestParser.AuxContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TestParser#operacao}.
+	 * Enter a parse tree produced by .
 	 * @param ctx the parse tree
 	 */
 	void enterOperacao(TestParser.OperacaoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TestParser#operacao}.
+	 * Exit a parse tree produced by .
 	 * @param ctx the parse tree
 	 */
 	void exitOperacao(TestParser.OperacaoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#val1}.
+	 * @param ctx the parse tree
+	 */
+	void enterVal1(TestParser.Val1Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#val1}.
+	 * @param ctx the parse tree
+	 */
+	void exitVal1(TestParser.Val1Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#val2}.
+	 * @param ctx the parse tree
+	 */
+	void enterVal2(TestParser.Val2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#val2}.
+	 * @param ctx the parse tree
+	 */
+	void exitVal2(TestParser.Val2Context ctx);
 }

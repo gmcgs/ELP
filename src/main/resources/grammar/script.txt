@@ -9,5 +9,7 @@ dimension: N*SIDE + MARGIN*2 ~ N*SIDE + MARGIN*2
 background: GRAY
 ---
 color BLACK
+circle 30,30 15
+square SIDE + MARGIN,SIDE + MARGIN SIDE
+ellipse MARGIN * N,MARGIN * N 10 ~ 13
 line 0|0|255
-rectangle MARGIN,MARGIN N*SIDE ~ N*SIDE

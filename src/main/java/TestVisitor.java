@@ -1,4 +1,5 @@
-// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src\Test.g4 by ANTLR 4.12.0
+// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src/main/resources/grammar\Test.g4 by ANTLR 4.12.0
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -39,6 +40,60 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDiv(TestParser.DivContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#colorCommand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorCommand(TestParser.ColorCommandContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#figure}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFigure(TestParser.FigureContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#estrutura}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEstrutura(TestParser.EstruturaContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#fig}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFig(TestParser.FigContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#shape}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitShape(TestParser.ShapeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#ifCommand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfCommand(TestParser.IfCommandContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#elseCommand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseCommand(TestParser.ElseCommandContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#condicao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicao(TestParser.CondicaoContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#forloop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForloop(TestParser.ForloopContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TestParser#objeto}.
 	 * @param ctx the parse tree
@@ -82,54 +137,6 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFull(TestParser.FullContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TestParser#colorCommand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColorCommand(TestParser.ColorCommandContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#figure}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFigure(TestParser.FigureContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#estrutura}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEstrutura(TestParser.EstruturaContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#fig}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFig(TestParser.FigContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#shape}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitShape(TestParser.ShapeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#ifCommand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIfCommand(TestParser.IfCommandContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#condicao}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCondicao(TestParser.CondicaoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TestParser#forloop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForloop(TestParser.ForloopContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link TestParser#capsID}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -154,9 +161,21 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAux(TestParser.AuxContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TestParser#operacao}.
+	 * Visit a parse tree produced by .
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOperacao(TestParser.OperacaoContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#val1}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVal1(TestParser.Val1Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#val2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVal2(TestParser.Val2Context ctx);
 }

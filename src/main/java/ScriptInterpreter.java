@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -16,6 +15,9 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
 
     public String div = "";
     private static final Map<Character, Integer> precedence = new HashMap<>();
+    private Map<String, Integer> auxValues = new HashMap<>();
+    private Map<String, Color> corEstruturas = new HashMap<>();
+    private Map<String, String> constEstruturas = new HashMap<>();
 
     @Override
     public void exitConstante(TestParser.ConstanteContext ctx) {
@@ -73,6 +75,9 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
             if(constantesInt.containsKey(ctx.capsID().CAPS().getText())){
                 System.err.println("Identificador de constante duplicado.");
                 exit(0);
+            }
+            if(Objects.equals(ctx.capsID().CAPS().getText(), "MARGIN")){
+                DrawScript.margin = Integer.parseInt(ctx.objeto().expressao().INT().getText());
             }
             constantesInt.put(ctx.capsID().CAPS().getText(),Integer.parseInt(ctx.objeto().expressao().INT().getText()));
             //System.out.println(constantesInt.get(ctx.capsID().CAPS().getText()).toString());
@@ -147,6 +152,20 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
             if(ctx.color().getText().matches("\\|\\d+\\|")){
                 int rgb = Integer.parseInt(ctx.color().cut().expressao().INT().getText());
                 checkColor(rgb,rgb,rgb);
+                corEstruturas.put(ctx.lowerID().LOWER().getText(), new Color(rgb,rgb,rgb));
+            } else if(ctx.color().getText().matches("\\d+\\|\\d+\\|\\d+")){
+                int r = Integer.parseInt(ctx.color().full().expressao(0).getText());
+                int g = Integer.parseInt(ctx.color().full().expressao(1).getText());
+                int b = Integer.parseInt(ctx.color().full().expressao(2).getText());
+                checkColor(r,g,b);
+                corEstruturas.put(ctx.lowerID().LOWER().getText(), new Color(r,g,b));
+            }
+        } else if (Objects.equals(ctx.lowerID().LOWER().getText(), "color") && ctx.capsID() != null) {
+            constEstruturas.put(ctx.lowerID().LOWER().getText(), ctx.capsID().CAPS().getText());
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "fill") && ctx.color() != null) {
+            if(ctx.color().getText().matches("\\|\\d+\\|")){
+                int rgb = Integer.parseInt(ctx.color().cut().expressao().INT().getText());
+                checkColor(rgb,rgb,rgb);
                 DrawScript.filler = new Color(rgb,rgb,rgb);
             } else if(ctx.color().getText().matches("\\d+\\|\\d+\\|\\d+")){
                 int r = Integer.parseInt(ctx.color().full().expressao(0).getText());
@@ -155,7 +174,7 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
                 checkColor(r,g,b);
                 DrawScript.filler = new Color(r,g,b);
             }
-        } else if (Objects.equals(ctx.lowerID().LOWER().getText(), "color") && ctx.capsID() != null) {
+        } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "fill") && ctx.capsID() != null) {
             DrawScript.filler = constantesCor.get(ctx.capsID().CAPS().getText());
         }
 
@@ -164,21 +183,186 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
     @Override
     public void exitFigure(TestParser.FigureContext ctx) {
         if(Objects.equals(ctx.lowerID().LOWER().getText(), "square")){
-            DrawScript.painter.figures.add(new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), constantesInt.get(ctx.shape().expressao().CAPS().getText())));
+            if (ctx.shape().dim() != null) {
+                DrawScript.painter.figures.add(new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText())));
+            } else {
+                DrawScript.painter.figures.add(new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText())));
+            }
         } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "rectangle")){
-            DrawScript.painter.figures.add(new DrawScript.Rectangle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+            if (ctx.shape().dim() != null) {
+                DrawScript.painter.figures.add(new DrawScript.Rectangle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+            } else {
+                System.err.println("Um retângulo tem de ter valores de comprimento e altura diferentes");
+            }
+
         } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "circle")){
-            DrawScript.painter.figures.add(new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), constantesInt.get(ctx.shape().expressao().CAPS().getText())));
+            if (ctx.shape().dim() != null) {
+                DrawScript.painter.figures.add(new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText())));
+            } else {
+                DrawScript.painter.figures.add(new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText())));
+            }
         } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "ellipse")){
-            DrawScript.painter.figures.add(new DrawScript.Ellipse(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+            if (ctx.shape().dim() != null) {
+                DrawScript.painter.figures.add(new DrawScript.Ellipse(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText())));
+            } else {
+                System.err.println("Uma elipse tem de ter valores de raio(comprimento) e raio(altura) diferentes");
+            }
         }
     }
 
     @Override
-    public void exitEstrutura(TestParser.EstruturaContext ctx) {
-
+    public void exitIfCommand(TestParser.IfCommandContext ctx) {
+        if(ctx.elseCommand() != null){
+            if(getVeracity(evaluateExpression(cleanAuxValues(ctx.condicao().val1().getText())), evaluateExpression(cleanAuxValues(ctx.condicao().val2().getText())), ctx.condicao().CONDITION().getText())){
+                for (TestParser.InstrucaoContext i : ctx.instrucao()){
+                    processInstruction(i);
+                }
+            } else {
+                for (TestParser.InstrucaoContext j : ctx.elseCommand().instrucao()){
+                    processInstruction(j);
+                }
+            }
+        } else {
+            System.out.println(getVeracity(evaluateExpression(cleanAuxValues(ctx.condicao().val1().getText())), evaluateExpression(cleanAuxValues(ctx.condicao().val2().getText())), ctx.condicao().CONDITION().getText()));
+            if(getVeracity(evaluateExpression(cleanAuxValues(ctx.condicao().val1().getText())), evaluateExpression(cleanAuxValues(ctx.condicao().val2().getText())), ctx.condicao().CONDITION().getText())){
+                System.out.println("está errado");
+                for (TestParser.InstrucaoContext i : ctx.instrucao()){
+                    processInstruction(i);
+                }
+            }
+        }
     }
 
+    private String cleanAuxValues(String str){
+        for (Map.Entry<String, Integer> entry : auxValues.entrySet()) {
+            String key = entry.getKey();
+            int constValue = entry.getValue();
+            str = str.replaceAll(key, String.valueOf(constValue));
+            str = str.replaceAll(key, String.valueOf(constValue));
+        }
+        return str;
+    }
+    private boolean getVeracity(int val1, int val2, String op){
+        switch(op){
+            case "==":
+                return val1 == val2;
+            case "!=":
+                return val1 != val2;
+            case "<":
+                return val1 < val2;
+            case ">":
+                return val1 > val2;
+            case "<=":
+                return val1 <= val2;
+            case ">=":
+                return val1 >= val2;
+            default:
+                return false;
+        }
+    }
+    @Override
+    public void enterForloop(TestParser.ForloopContext ctx) {
+        System.out.println(ctx.getText());
+        System.out.println(ctx.interval().getText());
+        for(TestParser.InstrucaoContext i : ctx.instrucao())
+            System.out.println(i);
+        if(Objects.equals(ctx.interval().BRACKET(0).getText(), "[")){
+            if(Objects.equals(ctx.interval().BRACKET(1).getText(), "]")){
+                try{
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i <= getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                } catch(NullPointerException e) {
+                    auxValues.put(ctx.lowerID().LOWER().getText(), getValue(ctx.interval().expressao(0).getText()));
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i <= getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                }
+            } else {
+                try{
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i < getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                } catch(NullPointerException e) {
+                    auxValues.put(ctx.lowerID().LOWER().getText(), getValue(ctx.interval().expressao(0).getText()));
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i < getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        System.out.println(auxValues.get(ctx.lowerID().LOWER().getText()));
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                }
+
+            }
+        } else {
+            if(Objects.equals(ctx.interval().BRACKET(1).getText(), "]")){
+                try{
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i <= getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                } catch(NullPointerException e) {
+                    auxValues.put(ctx.lowerID().LOWER().getText(), getValue(ctx.interval().expressao(0).getText())+1);
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i <= getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                }
+            } else {
+                try{
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i < getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                } catch(NullPointerException e) {
+                    auxValues.put(ctx.lowerID().LOWER().getText(), getValue(ctx.interval().expressao(0).getText())+1);
+                    for (int i = auxValues.get(ctx.lowerID().LOWER().getText()); i < getValue(ctx.interval().expressao(1).getText()); i++) {
+                        auxValues.put(ctx.lowerID().LOWER().getText(), i);
+                        for (TestParser.InstrucaoContext j : ctx.instrucao()){
+                            processInstruction(j);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void processInstruction(TestParser.InstrucaoContext ctx){
+        if(ctx.colorCommand() != null){
+            exitColorCommand(ctx.colorCommand());
+        } else if(ctx.figure() != null){
+            exitFigure(ctx.figure());
+        } else if(ctx.estrutura().forloop() != null){
+            exitForloop(ctx.estrutura().forloop());
+        } else if(ctx.estrutura().ifCommand() != null){
+            exitIfCommand(ctx.estrutura().ifCommand());
+        }
+    }
+
+    private int getValue(String value){
+        if(constantesInt.containsKey(value)){
+            return constantesInt.get(value);
+        } else {
+            return evaluateExpression(value);
+        }
+    }
     @Override public void exitDiv(TestParser.DivContext ctx) {
         div = ctx.DIV().getText();
     }
@@ -273,6 +457,9 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
                         break;
                     case '/':
                         result = a / b;
+                        break;
+                    case '%':
+                        result = a % b;
                         break;
                     default:
                         throw new IllegalArgumentException("Invalid operator: " + token);

@@ -1,5 +1,4 @@
-import AST.ASTBuilder;
-import AST.ASTNode;
+
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,6 +22,7 @@ public class DrawScript {
     public static Painter painter;
     public static int x=0;
     public static int y=0;
+    public static int margin = 0;
 
     public static class Painter extends JPanel{
 
@@ -32,6 +32,7 @@ public class DrawScript {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             for (Figure figure : figures) {
+                System.out.println(figure.toString());
                 figure.draw(g);
             }
         }
@@ -100,7 +101,7 @@ public class DrawScript {
             g.setColor(filler);
             g.fillOval(x, y, diameter, diameter);
             g.setColor(liner);
-            g.drawOval(x, y, diameter, diameter);
+            g.fillOval(x, y, diameter, diameter);
         }
     }
 
@@ -161,22 +162,7 @@ public class DrawScript {
             painter.setBounds(0,0,x,y);
             frontPanel.add(painter);
             layeredPane.add(frontPanel, JLayeredPane.PALETTE_LAYER);
-            System.out.println(painter.getFigures().size());
-            System.out.println("Jframe");
-            System.out.println(frame.getSize().toString());
-            System.out.println("BackGround");
-            System.out.println(backgroundPanel.getSize().toString());
-            System.out.println(backgroundPanel.getX());
-            System.out.println(backgroundPanel.getY());
-            System.out.println("painter");
-            painter.setSize(330,330);
-            System.out.println(painter.getSize().toString());
-            System.out.println(painter.getX());
-            System.out.println(painter.getY());
-            System.out.println("painter");
-            System.out.println(frontPanel.getSize().toString());
-            System.out.println(frontPanel.getX());
-            System.out.println(frontPanel.getY());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

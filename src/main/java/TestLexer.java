@@ -1,4 +1,5 @@
-// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src\Test.g4 by ANTLR 4.12.0
+// Generated from C:/Users/gmigu/Documents/3ano/2sem/ELP/projeto/src/main/resources/grammar\Test.g4 by ANTLR 4.12.0
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
