@@ -45,17 +45,21 @@ public class DrawScript {
         private int x;
         private int y;
         private int size;
+        private final Color fill;
+        private final Color line;
 
-        public Square(int x, int y, int size) {
+        public Square(int x, int y, int size, Color fill, Color line) {
             this.x = x;
             this.y = y;
             this.size = size;
+            this.fill = fill;
+            this.line = line;
         }
         @Override
         public void draw(Graphics g) {
-            g.setColor(filler);
+            g.setColor(fill);
             g.fillRect(x, y, size, size);
-            g.setColor(liner);
+            g.setColor(line);
             g.drawRect(x, y, size, size);
         }
     }
@@ -65,18 +69,21 @@ public class DrawScript {
         private int y;
         private int width;
         private int height;
-
-        public Rectangle(int x, int y, int width, int height) {
+        private final Color fill;
+        private final Color line;
+        public Rectangle(int x, int y, int width, int height, Color fill, Color line) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+            this.fill = fill;
+            this.line = line;
         }
         @Override
         public void draw(Graphics g) {
-            g.setColor(filler);
+            g.setColor(fill);
             g.fillRect(x, y, width, height);
-            g.setColor(liner);
+            g.setColor(line);
             g.drawRect(x, y, width, height);
         }
     }
@@ -85,18 +92,22 @@ public class DrawScript {
         private int x;
         private int y;
         private int diameter;
+        private final Color fill;
+        private final Color line;
 
-        public Circle(int x, int y, int diameter) {
+        public Circle(int x, int y, int diameter, Color fill, Color line) {
             this.x = x;
             this.y = y;
             this.diameter = diameter;
+            this.fill = fill;
+            this.line = line;
         }
 
         @Override
         public void draw(Graphics g) {
-            g.setColor(filler);
+            g.setColor(fill);
             g.fillOval(x, y, diameter, diameter);
-            g.setColor(liner);
+            g.setColor(line);
             g.drawOval(x, y, diameter, diameter);
         }
     }
@@ -106,25 +117,29 @@ public class DrawScript {
         private int y;
         private int width;
         private int height;
+        private final Color fill;
+        private final Color line;
 
-        public Ellipse(int x, int y, int width, int height) {
+        public Ellipse(int x, int y, int width, int height, Color fill, Color line) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+            this.fill = fill;
+            this.line = line;
         }
 
         @Override
         public void draw(Graphics g) {
-            g.setColor(filler);
+            g.setColor(fill);
             g.fillOval(x, y, width, height);
-            g.setColor(liner);
+            g.setColor(line);
             g.drawOval(x, y, width, height);
         }
     }
     public static void main(String[] args) {
         try{
-            FileReader reader = new FileReader("src/main/resources/grammar/scriptForIf");
+            FileReader reader = new FileReader("src/Mickey.txt");
             BufferedReader bufferedReader = new BufferedReader(reader);
             StringBuilder fileContents = new StringBuilder();
             String line;
@@ -158,7 +173,6 @@ public class DrawScript {
             painter.setBounds(0,0,x,y);
             frontPanel.add(painter);
             layeredPane.add(frontPanel, JLayeredPane.PALETTE_LAYER);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

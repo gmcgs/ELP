@@ -1,0 +1,6 @@
+for i in [0, MARGIN]
+_
+if N>=8
+    circle N*5,N*5 N*5-10
+    rectangle N*8,N+8 SIDE-N ~ SIDE
+_

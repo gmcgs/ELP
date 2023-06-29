@@ -188,51 +188,40 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
         if(!skip){
             if(Objects.equals(ctx.lowerID().LOWER().getText(), "square")){
                 if (ctx.shape().dim() != null) {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    lastFig = new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 } else {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    lastFig = new DrawScript.Square(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 }
             } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "rectangle")){
                 if (ctx.shape().dim() != null) {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Rectangle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    System.out.println("pintar retangulo");
+                    lastFig = new DrawScript.Rectangle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 } else {
                     System.err.println("Um retângulo tem de ter valores de comprimento e altura diferentes");
                 }
 
             } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "circle")){
                 if (ctx.shape().dim() != null) {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    System.out.println("pintar circulo");
+                    lastFig = new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 } else {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    lastFig = new DrawScript.Circle(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), getValue(ctx.shape().expressao().getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 }
             } else if(Objects.equals(ctx.lowerID().LOWER().getText(), "ellipse")){
                 if (ctx.shape().dim() != null) {
-                    if(!checkIfExists(lastFig)){
-                        lastFig = new DrawScript.Ellipse(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText()));
-                        DrawScript.painter.figures.add(lastFig);
-                    }
+                    lastFig = new DrawScript.Ellipse(evaluateExpression(ctx.fig().expressao(0).getText()), evaluateExpression(ctx.fig().expressao(1).getText()), evaluateExpression(ctx.shape().dim().expressao(0).getText()), evaluateExpression(ctx.shape().dim().expressao(1).getText()),DrawScript.filler, DrawScript.liner);
+                    DrawScript.painter.figures.add(lastFig);
                 } else {
                     System.err.println("Uma elipse tem de ter valores de raio(comprimento) e raio(altura) diferentes");
                 }
             }
         }
     }
-
 
     @Override
     public void exitIfCommand(TestParser.IfCommandContext ctx) {
@@ -255,6 +244,7 @@ public class ScriptInterpreter extends TestBaseListener implements TestListener{
                     }
                 } else {
                     skip = true;
+                    return;
                 }
 
             }

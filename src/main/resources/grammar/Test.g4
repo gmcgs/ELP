@@ -39,7 +39,7 @@ capsID: CAPS;
 lowerID: LOWER;
 expressao: INT | CAPS | LOWER | operacao+;
 aux: INT | CAPS | LOWER;
-operacao: aux OPERATOR aux | aux OPERATOR operacao |
+operacao: aux | aux OPERATOR aux | aux OPERATOR operacao |
 aux OPERATOR OPEN operacao CLOSE | operacao OPERATOR OPEN operacao CLOSE |
 OPEN operacao CLOSE OPERATOR operacao | OPEN operacao CLOSE OPERATOR aux;
 val1: INT|operacao+;
